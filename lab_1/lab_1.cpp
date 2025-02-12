@@ -5,7 +5,7 @@
 using namespace std;
 
 int main (){
-    unsigned int count_objects {1};
+    unsigned int count_objects {3};
     vector <Bus> objects;
     
     cout << "lab_1" << endl;
