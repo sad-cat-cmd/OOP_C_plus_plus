@@ -15,5 +15,5 @@ int main (){
         if (i == 1) Set_Values_For_ClassObject(2, objects, i);
         if (i == 2) Set_Values_For_ClassObject(3, objects, i);
     }
-    Find_in_vector(objects);
+    Find_in_vector(objects);\
 }
