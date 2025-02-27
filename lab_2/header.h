@@ -27,15 +27,25 @@ class Bus {
             Mileage = _Mileage;
         }
         Bus (const Bus& _object_BUS) {
-            Name_Driver = _object_BUS.Name_Driver;
-            Number_Path = _object_BUS.Number_Path;
-            Brand_Bus = _object_BUS.Brand_Bus;
-            Year_Beginning_Start = _object_BUS.Year_Beginning_Start;
-            Mileage = _object_BUS.Mileage;
-            
+            *this = _object_BUS;
+            // Name_Driver = _object_BUS.Name_Driver;
+            // Number_Path = _object_BUS.Number_Path;
+            // Brand_Bus = _object_BUS.Brand_Bus;
+            // Year_Beginning_Start = _object_BUS.Year_Beginning_Start;
+            // Mileage = _object_BUS.Mileage;
         }
+        
         ~Bus(){
 
+        }
+        Bus& operator ++ () {
+            this->Mileage++;
+            return *this;
+        }
+        Bus operator ++ (int) {
+            Bus temp = *this;
+            ++this->Mileage;
+            return temp;
         }
         // added in lab2
         bool operator == (const Bus & _Bus) { 
@@ -164,6 +174,15 @@ void Compraing_ClassObjects(vector <Bus> &temp_objects){
     else cout << "the last two objects_PATH are equel\n---------" << endl;
 
     temp_objects[temp_objects.size() -1] = temp_objects[temp_objects.size() - 3];
+
+    cout << "----------------" << endl;
+    cout << "++ 1:" << temp_objects[0].get_Mileage() << endl;
+    temp_objects[0] = ++temp_objects[1];
+    cout << "++ 1:" << temp_objects[0].get_Mileage() << endl;
+    cout << "----------------" << endl;
+    cout << "2 ++: " << temp_objects[0].get_Mileage() << endl;
+    temp_objects[0] = temp_objects[2]++;
+    cout << "2 ++: " << temp_objects[0].get_Mileage() << endl;
 }
 void Print_Full_String(vector <Bus> temp_objects){
     Observer TEMP;
