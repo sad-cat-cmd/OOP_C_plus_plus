@@ -68,7 +68,6 @@ void Print_queue_with_pop(queue<Car>& temp_queue){
 void Complex_operations(){
     queue <Car> queue_1;
     queue <Car> queue_2;
-
     Add_elements(queue_1, 5);
     Remove_front_N(queue_1, 2);
     

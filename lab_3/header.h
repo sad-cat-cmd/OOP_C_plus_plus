@@ -43,7 +43,7 @@ void Enter_Sting(string Input_Info, string &Temp_String) {
     cout << Input_Info << ":  ";
     cin >> Temp_String;
 }
-void Set_Info(vector <Toy>& temp_Toy, vector <Produce>& temp_Produce, vector <Dairy_Produce>& temp_Daire_Produce, unsigned int Count_Object){
+void Set_Info(vector <Product>& ALL_Product,vector <Toy>& temp_Toy, vector <Produce>& temp_Produce, vector <Dairy_Produce>& temp_Daire_Produce, unsigned int Count_Object){
     string ID, Name, Expiration_Date, Color, Name_Farm;
 
     for (int i = 0; i < Count_Object; i++) {
@@ -58,6 +58,7 @@ void Set_Info(vector <Toy>& temp_Toy, vector <Produce>& temp_Produce, vector <Da
         temp_Object.set_color(Color);
 
         temp_Toy.push_back(temp_Object);
+        ALL_Product.push_back(temp_Object);
     }
     for (int i = 0; i < Count_Object; i++) {
         cout << "ENTER PRODUCE-OBJECT:" << endl;
@@ -71,6 +72,7 @@ void Set_Info(vector <Toy>& temp_Toy, vector <Produce>& temp_Produce, vector <Da
         temp_Object.set_Expiration_Date(Expiration_Date);
 
         temp_Produce.push_back(temp_Object);
+        ALL_Product.push_back(temp_Object);
     }
     for (int i = 0; i < Count_Object; i++) {
         cout << "ENTER DAIRE_PRODUCE-OBJECT:" << endl;
@@ -87,9 +89,10 @@ void Set_Info(vector <Toy>& temp_Toy, vector <Produce>& temp_Produce, vector <Da
         temp_Object.set_Name_Farm(Name_Farm);
 
         temp_Daire_Produce.push_back(temp_Object);
+        ALL_Product.push_back(temp_Object);
     }
 }
-void Print_Info(vector <Toy> temp_Toy, vector <Produce> temp_Produce, vector <Dairy_Produce> temp_Daire_Produce, unsigned int Count_Object) {
+void Print_Info(vector <Product> temp_Product, vector <Toy> temp_Toy, vector <Produce> temp_Produce, vector <Dairy_Produce> temp_Daire_Produce, unsigned int Count_Object) {
     cout << "TOYVECTOR: "<< endl;
     for (int i = 0; i < Count_Object; i++) {
         cout << i << ": " << temp_Toy[i].get_id() << ", " << temp_Toy[i].get_name() << ", " << temp_Toy[i].get_color() << endl;
@@ -101,6 +104,12 @@ void Print_Info(vector <Toy> temp_Toy, vector <Produce> temp_Produce, vector <Da
     cout << "DAIRE PRODUCE VECTOR:" << endl;
     for (int i = 0; i < Count_Object; i++) {
         cout << i << ": "<< temp_Daire_Produce[i].get_id()<< ", " << temp_Daire_Produce[i].get_name() << ", "<< temp_Daire_Produce[i].get_Expiration_Date() << ", "<< temp_Daire_Produce[i].get_Name_Farm()<< endl;
+    }
+}
+void Print_All_Object(vector <Product> All_Object) {
+    cout << "All_Object^" << endl;
+    for (int i= 0; i <  All_Object.size(); i++) {
+        cout << i <<": " <<All_Object[i].get_id() << ",  " << All_Object[i].get_name() << endl;
     }
 }
 
