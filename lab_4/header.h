@@ -1,53 +1,128 @@
 #pragma once
 
 #include <string>
-#include <algorithm>
-#include <unordered_set>
 using namespace std;
 
 template <typename Type>
 
 class Set{
     private:
-        vector <Type> plenty;
-        
-        void Remove_Duplicates(vector <Type>& this_vector) {
-            unordered_set <Type> s;
-            vector <Type> result;
-            for (Type value : this_vector){
-                if(s.find(value) == s.end()){
-                    s.insert(value);
-                    result.push_back(value);
-                }
-            }
-            this_vector.clear();
-            this_vector = result;
-        }
+        Type *plenty;
+        unsigned int Size_Plenty;
+
     public:
-    void Print_Vector(string Out_Info) {
-        cout << Out_Info<< endl;
-        for (int num : plenty) {
-            cout << num << "\t";
+    Set() : plenty(nullptr), Size_Plenty(0) {}
+    Set(const Set& other) {
+        Size_Plenty = other.Size_Plenty;
+        if (Size_Plenty > 0) {
+            plenty = new Type[Size_Plenty];
+            for (unsigned int i = 0; i < Size_Plenty; i++) {
+                plenty[i] = other.plenty[i];
+            }
+        } else {
+            plenty = nullptr;
         }
-        cout << endl;
     }
-    void operator () (const vector <Type>& temp_vector) {
-        this->plenty = temp_vector;
+    Set& operator=(const Set& other) {
+        if (this != &other) { // Защита от самоприсваивания
+            delete[] plenty; // Освобождаем старую память
+            Size_Plenty = other.Size_Plenty;
+            if (Size_Plenty > 0) {
+                plenty = new Type[Size_Plenty];
+                for (unsigned int i = 0; i < Size_Plenty; i++) {
+                    plenty[i] = other.plenty[i];
+                }
+            } else {
+                plenty = nullptr;
+            }
+        }
+        return *this;
+    }
+    unsigned int get_size_plenty() {
+        return Size_Plenty;
+    }
+    Type* get_Plenty_elements() {
+        return plenty;
     }
     void operator + (const Set& _Set) {
-        this->plenty.insert(plenty.end(), _Set.plenty.begin(), _Set.plenty.end());
-        this->Remove_Duplicates(this->plenty);
+        Set<Type> result;
+        
+        // Добавляем все уникальные элементы из текущего множества
+        for (unsigned i = 0; i < Size_Plenty; ++i) {
+            bool found = false;
+            for (unsigned j = 0; j < result.Size_Plenty; ++j) {
+                if (plenty[i] == result.plenty[j]) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                // Добавляем элемент в result
+                Type* temp = new Type[result.Size_Plenty + 1];
+                for (unsigned k = 0; k < result.Size_Plenty; ++k) {
+                    temp[k] = result.plenty[k];
+                }
+                temp[result.Size_Plenty] = plenty[i];
+                delete[] result.plenty;
+                result.plenty = temp;
+                result.Size_Plenty++;
+            }
+        }
+        
+        // Добавляем все уникальные элементы из второго множества
+        for (unsigned i = 0; i < _Set.Size_Plenty; ++i) {
+            bool found = false;
+            for (unsigned j = 0; j < result.Size_Plenty; ++j) {
+                if (_Set.plenty[i] == result.plenty[j]) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                // Добавляем элемент в result
+                Type* temp = new Type[result.Size_Plenty + 1];
+                for (unsigned k = 0; k < result.Size_Plenty; ++k) {
+                    temp[k] = result.plenty[k];
+                }
+                temp[result.Size_Plenty] = _Set.plenty[i];
+                delete[] result.plenty;
+                result.plenty = temp;
+                result.Size_Plenty++;
+            }
+        }
+        
+        // Заменяем текущее множество на результат
+        delete[] plenty;
+        plenty = result.plenty;
+        Size_Plenty = result.Size_Plenty;
+        
+        // Чтобы result не удалил память в деструкторе
+        result.plenty = nullptr;
+        result.Size_Plenty = 0;
     }
-    bool operator <= (const Set& _Set) {
-        if (this->plenty.size() > _Set.plenty.size()) return false;
-        else return true;
+    void operator () (const vector <Type> & temp_vector){
+        this->plenty = new Type[temp_vector.size()];
+        Size_Plenty = temp_vector.size();
+        for (int i = 0; i < Size_Plenty; i++) {
+            plenty[i] = temp_vector[i];
+        }
+
+    }
+    ~Set () {
+        delete[] plenty;
+        plenty = nullptr;
+    }
+    int operator <= (const Set& _Set){
+        if (this->Size_Plenty == _Set.Size_Plenty) {
+            for (int i = 0; i < Size_Plenty; i++) {
+                if (this->plenty[i] != _Set.plenty[i]) {return -1;}
+            }
+            return 0;
+        }
+        else {return -1;}
     }
 };
-void Print_Plenty (Set<int> set_1, Set<int> set_2, Set<int> set_3) {
-    set_1.Print_Vector("SET1 :");
-    set_2.Print_Vector("SET2 :");
-    set_3.Print_Vector("SET3 :");
-}
+
 void Enter_Plenty(vector <int>& temp_vector, int number) {
     const int count = 5;
     int temp_value;
@@ -58,20 +133,36 @@ void Enter_Plenty(vector <int>& temp_vector, int number) {
         temp_vector.push_back(temp_value);
     }
 }
-void Operation_Planty(vector <int> temp_1, vector<int> temp_2, vector <int> temp_3){
+void Print_Plenty(Set <int> _Set , string Name_Set){
+    int *temp_plenty;
+    unsigned int temp_Size;
+    temp_plenty = _Set.get_Plenty_elements();
+    temp_Size = _Set.get_size_plenty();
+
+    cout << Name_Set<< ":  ";
+    for (int i = 0; i < temp_Size; i++) {
+        cout << temp_plenty[i] << ", ";
+    }
+    cout << endl;
+
+}
+void Operation_Plenty(vector <int> temp_1, vector<int> temp_2, vector <int> temp_3){
     Set <int> Set_1, Set_2, Set_3;
+    
     Set_1(temp_1);
     Set_2(temp_2);
     Set_3(temp_3);
-    Print_Plenty(Set_1, Set_2, Set_3);
-    
-    cout << "\n" << endl;
-    Set_1 + Set_2;
-    if (Set_1 <= Set_2) cout << "Set_1 <= Set_2"<<endl;
-    else cout << "Set_1 > Set_2";
-    cout << "\n" << endl;
 
-    Print_Plenty(Set_1, Set_2, Set_3);
+    Print_Plenty(Set_1, "Set_1 operator () ");
+    Print_Plenty(Set_2, "Set_2 operator () ");
+    Print_Plenty(Set_3, "Set_3 operator () ");
+
+    Set_1 + Set_2;
+
+    Print_Plenty (Set_1, "Set_1 operator (+) Set_2");
+
+    if (Set_1 <= Set_2 == 0) {cout << "sets are equal"<< endl;}
+    else {cout << "sets are not equal"<< endl;}
 }
 
 

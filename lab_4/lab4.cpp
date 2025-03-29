@@ -15,5 +15,5 @@ int main (){
     Enter_Plenty(plenty_2, 2);
     Enter_Plenty(plenty_3, 3);
 
-    Operation_Planty(plenty_1, plenty_2, plenty_3);
+    Operation_Plenty(plenty_1, plenty_2, plenty_3);
 }
