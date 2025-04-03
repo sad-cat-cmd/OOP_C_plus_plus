@@ -24,8 +24,8 @@ class Set{
         }
     }
     Set& operator=(const Set& other) {
-        if (this != &other) { // Защита от самоприсваивания
-            delete[] plenty; // Освобождаем старую память
+        if (this != &other) {
+            delete[] plenty;
             Size_Plenty = other.Size_Plenty;
             if (Size_Plenty > 0) {
                 plenty = new Type[Size_Plenty];
@@ -43,6 +43,43 @@ class Set{
     }
     Type* get_Plenty_elements() {
         return plenty;
+    }
+    void operator - (const Set& _Set) {
+        Set<Type> result;
+
+        for (unsigned i = 0; i < Size_Plenty; ++i) {
+            bool found = false;
+            for (unsigned j = 0; j < result.Size_Plenty; ++j) {
+                if (plenty[i] == result.plenty[j]) {
+                    found = true;
+                    break;
+                }
+            }
+            for (unsigned h = 0; h < _Set.Size_Plenty ; ++h){
+                if (plenty[i] == _Set.plenty[h]){
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                // Добавляем элемент в result
+                Type* temp = new Type[result.Size_Plenty + 1];
+                for (unsigned k = 0; k < result.Size_Plenty; ++k) {
+                    temp[k] = result.plenty[k];
+                }
+                temp[result.Size_Plenty] = plenty[i];
+                delete[] result.plenty;
+                result.plenty = temp;
+                result.Size_Plenty++;
+            }
+        }
+
+        delete[] plenty;
+        plenty = result.plenty;
+        Size_Plenty = result.Size_Plenty;
+        
+        result.plenty = nullptr;
+        result.Size_Plenty = 0;
     }
     void operator + (const Set& _Set) {
         Set<Type> result;
@@ -91,12 +128,10 @@ class Set{
             }
         }
         
-        // Заменяем текущее множество на результат
         delete[] plenty;
         plenty = result.plenty;
         Size_Plenty = result.Size_Plenty;
         
-        // Чтобы result не удалил память в деструкторе
         result.plenty = nullptr;
         result.Size_Plenty = 0;
     }
@@ -161,6 +196,9 @@ void Operation_Plenty(vector <int> temp_1, vector<int> temp_2, vector <int> temp
 
     Print_Plenty (Set_1, "Set_1 operator (+) Set_2");
 
+    Set_2 - Set_3;
+
+    Print_Plenty(Set_2, "Set_1 operator (-) Set_3");
     if (Set_1 <= Set_2 == 0) {cout << "sets are equal"<< endl;}
     else {cout << "sets are not equal"<< endl;}
 }
