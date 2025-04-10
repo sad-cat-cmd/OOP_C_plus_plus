@@ -22,5 +22,5 @@ int main (){
 
     Operation_Plenty(plenty_1, plenty_2, plenty_3, plenty_4);
 
-    Conversion_eighteen_digit_systeme_to_duodecimal();
+    Сonversion_eighteen_digit_system_to_duodecimal();
 }

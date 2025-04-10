@@ -28,8 +28,8 @@ class Set{
         }
     }
     Set& operator=(const Set& other) {
-        if (this != &other) { // Защита от самоприсваивания
-            delete[] plenty; // Освобождаем старую память
+        if (this != &other) { 
+            delete[] plenty; 
             Size_Plenty = other.Size_Plenty;
             if (Size_Plenty > 0) {
                 plenty = new Type[Size_Plenty];
@@ -49,7 +49,7 @@ class Set{
         return plenty;
     }
     void operator + (const Set& _Set) {
-        if (this->Size_Plenty == 0 || _Set.Size_Plenty == 0) {throw runtime_error ("Exception: one of the vectors is empty\n");}
+        if (this->Size_Plenty == 0 || _Set.Size_Plenty == 0) {throw runtime_error ("Exception: one of the plentes is empty\n");}
         Set<Type> result;
         
         // Добавляем все уникальные элементы из текущего множества
@@ -120,14 +120,23 @@ class Set{
         delete[] plenty;
         plenty = nullptr;
     }
-    int operator <= (const Set& _Set){
-        if (this->Size_Plenty == _Set.Size_Plenty) {
-            for (int i = 0; i < Size_Plenty; i++) {
-                if (this->plenty[i] != _Set.plenty[i]) {return -1;}
-            }
-            return 0;
+    bool operator<=(const Set& _Set) const {
+        if (this->Size_Plenty == 0) {
+            return true;
         }
-        else {return -1;}
+        for (int i = 0; i < this->Size_Plenty; i++) {
+            bool found = false;
+            for (int j = 0; j < _Set.Size_Plenty; j++) {
+                if (this->plenty[i] == _Set.plenty[j]) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                return false;
+            }
+        }
+        return true;
     }
 };
 
@@ -138,7 +147,7 @@ void Enter_Plenty(vector <int>& temp_vector, int number) {
     // size + 1 in for
     if (number == 1){
         for (int i = 0; i < count + 1; i++) {
-            if (i >= count) {throw runtime_error("Exception: iterator >= size your vector");}
+            if (i >= count) {throw runtime_error("Exception: iterator > size your vector");}
             cout << i << ": ";
             cin >> temp_value;
             temp_vector.push_back(temp_value);
@@ -182,29 +191,60 @@ void Operation_Plenty(vector <int> temp_1, vector<int> temp_2, vector <int> temp
     // Exception: one of the vectors is empty\n
     try {Set_3 + Set_4;}
     catch(const std::exception& e) {std::cerr << e.what() << '\n';}
-    if (Set_1 <= Set_2 == 0) {cout << "sets are equal"<< endl;}
+    if (Set_1 <= Set_2 == true) {cout << "sets are equal"<< endl;}
     else {cout << "sets are not equal"<< endl;}
 }
 
-int eighteen_digit_to_decimal(const string& eig){return stoi(eig, nullptr, 18);}
-string decimal_To_doudecimal (int decimal) {
+int eighteen_digit_to_decimal(const string& eig) {
+    return stoi(eig, nullptr, 18);
+}
+
+string decimal_to_duodecimal(int decimal) {
+    if (decimal == 0) return "0";
+
     string base_12 = "";
     while (decimal > 0) {
         int remainder = decimal % 12;
-        if (remainder < 10) base_12 += (char)('0' +remainder);
-        else base_12 += char('A' + (remainder - 10));
-        decimal /=12;
+        if (remainder < 10) {
+            base_12 += (char)('0' + remainder);
+        } else {
+            base_12 += (char)('A' + (remainder - 10));
+        }
+        decimal /= 12;
     }
     reverse(base_12.begin(), base_12.end());
-    if (base_12.empty()) return "0";
-    else return base_12;
-
+    return base_12;
 }
-void Conversion_eighteen_digit_systeme_to_duodecimal(){
+
+bool is_valid_eighteen_base(const string& str) {
+    for (char c : str) {
+        c = toupper(c);
+        if (!((c >= '0' && c <= '9') || (c >= 'A' && c <= 'H'))) {
+            return false;
+        }
+    }
+    return true;
+}
+
+// Функция для выполнения преобразования
+void Сonversion_eighteen_digit_system_to_duodecimal() {
     cout << endl;
     string temp_value;
-    cout << "ENTER VALUE IN HEXANDEMICAL SYSTEM: ";
+    cout << "ENTER VALUE IN 18-BASE SYSTEM (0-9, A-H): ";
     cin >> temp_value;
-    temp_value = decimal_To_doudecimal(eighteen_digit_to_decimal(temp_value));
-    cout << "DUOCIMAL VALUE: " << temp_value << endl;
+
+    try {
+        if (!is_valid_eighteen_base(temp_value)) {
+            throw runtime_error("Exception: invalid characters in input (use 0-9, A-H)");
+        }
+        int decimal_value = eighteen_digit_to_decimal(temp_value);
+        string duodecimal_value = decimal_to_duodecimal(decimal_value);
+
+        cout << "DUODECIMAL VALUE: " << duodecimal_value << endl;
+    } catch (const runtime_error& e) {
+        cerr << e.what() << endl;
+    }
 }
+
+// bool, все элементы a есть в b
+// исключение к символам 
